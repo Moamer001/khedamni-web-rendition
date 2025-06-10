@@ -9,31 +9,31 @@ const Steps = () => {
       number: 1,
       title: 'قم بالتسجيل وانشاء حساب',
       description: 'قم بانشاء حساب واضف معلوماتك الأساسية لتبدء رحلتك معنا وايضا معلومات حول امحاتك المنتجة',
-      color: 'green'
+      color: 'green' as const
     },
     {
       number: 2,
       title: 'حدد وقت عملك',
       description: 'قم بتحديد الاوقات المختلفة التي يمكن يمكنك بهدائك واثبتك لدى للدوية',
-      color: 'orange'
+      color: 'orange' as const
     },
     {
       number: 3,
       title: 'استقبل طلبات العمل',
       description: 'انتظر طن طلب أعمالك دوائر الاتصاحل بك منشارك للدوية ولقياسك طلبات الخدمات للحصول على اكبر كمية مرضية',
-      color: 'green'
+      color: 'green' as const
     },
     {
       number: 4,
       title: 'قدم الخدمة',
       description: 'انتقل الى مكان العمل و أكمل دورة مجلة الخدمة',
-      color: 'blue'
+      color: 'blue' as const
     },
     {
       number: 5,
       title: 'احصل على التقييمات',
       description: 'سيقوم العملاء بتقييمك الخدمات المطلوبة سبسهل عتبارك الحصول على العملاء الجدد',
-      color: 'yellow'
+      color: 'yellow' as const
     }
   ];
 
@@ -42,31 +42,31 @@ const Steps = () => {
       number: 1,
       title: 'سجل نفسك',
       description: 'ابدأ رحلتك معنا من خلال إنشاء حساب بسيط الخطوة على موقعنا الرسمي',
-      color: 'green'
+      color: 'green' as const
     },
     {
       number: 2,
       title: 'ابحث عن خدمة',
       description: 'اختيار الخدمة المطلوبة التي تناسب احتياجاتك، مع الحرفيين المؤهلين أو التقييم أخرى',
-      color: 'orange'
+      color: 'orange' as const
     },
     {
       number: 3,
       title: 'حدد حرفي',
       description: 'اختيار أفضل حرفي مناسب واحصلائه وتقييمه وحجابته واستطل مهارفة من النحل الذي فجم بنجاحه على النحل',
-      color: 'green'
+      color: 'green' as const
     },
     {
       number: 4,
       title: 'قم بتطبيط الخدمة',
       description: 'قم بإضافة العوامل إلى قابوسة الخدمات الإدارية بالتفصيل',
-      color: 'blue'
+      color: 'blue' as const
     },
     {
       number: 5,
       title: 'استلم الفدعان وشارك تعليقك',
       description: 'بعد تلقي الخدمة، قم بمراجع السعر أضادة أو تعليقانك على الخدمة التى كنت أتلقيتها مع تقييم الحرفي أو أعمله',
-      color: 'yellow'
+      color: 'yellow' as const
     }
   ];
 
