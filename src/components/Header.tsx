@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { User, Map, House } from 'lucide-react';
+import { User, Map, House, Wrench, Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
@@ -9,6 +9,8 @@ const Header = () => {
   const navItems = [
     { icon: House, label: 'الصفحة الرئيسية', href: '/' },
     { icon: Map, label: 'الخطوات', href: '/steps' },
+    { icon: Wrench, label: 'أنت حرفي', href: '/craftsman' },
+    { icon: Search, label: 'أنت تبحث حرفي', href: '/client' },
     { icon: User, label: 'حسابي', href: '/account' }
   ];
 
