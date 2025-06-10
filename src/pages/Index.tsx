@@ -2,6 +2,9 @@
 import React from 'react';
 import Header from '../components/Header';
 import HeroSection from '../components/HeroSection';
+import AboutSection from '../components/AboutSection';
+import GoalSection from '../components/GoalSection';
+import UsersSection from '../components/UsersSection';
 import BackgroundShapes from '../components/BackgroundShapes';
 
 const Index = () => {
@@ -11,9 +14,12 @@ const Index = () => {
       <BackgroundShapes />
       
       {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col">
+      <div className="relative z-10">
         <Header />
         <HeroSection />
+        <AboutSection />
+        <GoalSection />
+        <UsersSection />
       </div>
     </div>
   );
