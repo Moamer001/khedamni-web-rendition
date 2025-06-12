@@ -25,14 +25,14 @@ const StepCard = ({ number, title, description, color }: StepCardProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-lg text-center arabic-text">
-      <div className={`w-16 h-16 rounded-lg ${getColorClasses()} flex items-center justify-center text-2xl font-bold mx-auto mb-4`}>
+    <div className="bg-white rounded-lg p-4 md:p-6 shadow-lg text-center arabic-text hover:shadow-xl transition-shadow duration-300">
+      <div className={`w-12 h-12 md:w-16 md:h-16 rounded-lg ${getColorClasses()} flex items-center justify-center text-lg md:text-2xl font-bold mx-auto mb-3 md:mb-4`}>
         {number}
       </div>
-      <h3 className="text-lg font-bold text-gray-800 mb-3 leading-snug">
+      <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2 md:mb-3 leading-snug">
         {title}
       </h3>
-      <p className="text-gray-600 text-sm leading-relaxed">
+      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
         {description}
       </p>
     </div>

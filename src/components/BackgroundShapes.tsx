@@ -4,7 +4,7 @@ import React from 'react';
 const BackgroundShapes = () => {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Main organic shape from bottom-left */}
+      {/* Main organic shape from bottom-left - responsive */}
       <svg
         className="absolute bottom-0 left-0 w-full h-full"
         viewBox="0 0 1200 800"
@@ -24,10 +24,10 @@ const BackgroundShapes = () => {
         />
       </svg>
 
-      {/* Additional decorative elements */}
-      <div className="absolute top-20 left-20 w-32 h-32 bg-khedamni-orange opacity-10 rounded-full animate-float"></div>
-      <div className="absolute top-40 right-32 w-24 h-24 bg-khedamni-white opacity-10 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
-      <div className="absolute bottom-40 right-20 w-16 h-16 bg-khedamni-orange opacity-20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+      {/* Additional decorative elements - responsive sizing */}
+      <div className="absolute top-16 md:top-20 left-16 md:left-20 w-24 h-24 md:w-32 md:h-32 bg-khedamni-orange opacity-10 rounded-full animate-float"></div>
+      <div className="absolute top-32 md:top-40 right-24 md:right-32 w-18 h-18 md:w-24 md:h-24 bg-khedamni-white opacity-10 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute bottom-32 md:bottom-40 right-16 md:right-20 w-12 h-12 md:w-16 md:h-16 bg-khedamni-orange opacity-20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
     </div>
   );
 };
