@@ -1,8 +1,15 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ToolboxIllustration from './ToolboxIllustration';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleRegisterClick = () => {
+    navigate('/login');
+  };
+
   return (
     <main className="relative flex-1 flex items-center justify-center px-4 md:px-6 py-8 md:py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -27,7 +34,10 @@ const HeroSection = () => {
           </p>
           
           <div className="space-y-3">
-            <button className="bg-khedamni-orange hover:bg-orange-500 text-khedamni-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg w-full sm:w-auto">
+            <button 
+              onClick={handleRegisterClick}
+              className="bg-khedamni-orange hover:bg-orange-500 text-khedamni-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg w-full sm:w-auto"
+            >
               سجل الآن
             </button>
             <p className="text-khedamni-white opacity-70 text-sm md:text-base">
