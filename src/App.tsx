@@ -10,6 +10,7 @@ import Craftsman from "./pages/Craftsman";
 import Client from "./pages/Client";
 import Login from "./pages/Login";
 import ChooseRole from "./pages/ChooseRole";
+import CraftsmanBenefits from "./pages/CraftsmanBenefits";
 import CreateAccount from "./pages/CreateAccount";
 import AccountSuccess from "./pages/AccountSuccess";
 import CompleteProfile from "./pages/CompleteProfile";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/client" element={<Client />} />
           <Route path="/login" element={<Login />} />
           <Route path="/choose-role" element={<ChooseRole />} />
+          <Route path="/craftsman-benefits" element={<CraftsmanBenefits />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/account-success" element={<AccountSuccess />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />

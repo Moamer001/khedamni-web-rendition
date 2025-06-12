@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,9 @@ const ChooseRole = () => {
   };
 
   const handleNext = () => {
-    if (selectedRole) {
+    if (selectedRole === 'craftsman') {
+      navigate('/craftsman-benefits');
+    } else if (selectedRole === 'client') {
       navigate(`/create-account?role=${selectedRole}`);
     }
   };
