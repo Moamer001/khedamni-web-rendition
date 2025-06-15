@@ -60,9 +60,19 @@ const Profile = () => (
       </Link>
     </div>
 
-    {/* Collapsible Sections */}
+    {/* صفحة حسابي - زر "حول الموقع" فوق زر "قانوني" */}
     <div className="max-w-md w-full mx-auto">
-      {/* Legal */}
+      {/* زر حول الموقع */}
+      <Link
+        to="/about"
+        className="flex items-center gap-2 px-7 py-3 mb-3 bg-white rounded-2xl shadow text-[#202c76] text-base font-semibold hover:bg-gray-50 transition w-full"
+      >
+        <Info className="w-5 h-5" />
+        <span className="flex-1 text-right">حول الموقع</span>
+        <ChevronLeft className="w-4 h-4 ml-auto" />
+      </Link>
+
+      {/* قانوني */}
       <Section title="قانوني" icon={FileText}>
         <div className="px-7 pb-3">
           <a
@@ -84,17 +94,10 @@ const Profile = () => (
         </div>
       </Section>
 
-      {/* More */}
+      {/* المزيد */}
       <Section title="المزيد" icon={User}>
         <div className="px-7 pb-3">
-          <a
-            href="/about"
-            className="flex items-center gap-2 py-2 text-gray-700 hover:underline w-full text-right"
-          >
-            <Info className="w-5 h-5" />
-            <span className="flex-1">حول الموقع</span>
-            <ChevronLeft className="w-4 h-4 ml-auto" />
-          </a>
+          {/* تم حذف خيار "حول الموقع" من هنا */}
           <Link
             to="/contact"
             className="flex items-center gap-2 py-2 text-gray-700 hover:underline w-full text-right"
