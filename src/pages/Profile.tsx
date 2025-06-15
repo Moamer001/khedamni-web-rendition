@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Info,
@@ -11,6 +10,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Link } from "react-router-dom";
 
 const Section = ({
   title,
@@ -52,9 +52,12 @@ const Profile = () => (
       <div className="text-[#202c76] text-sm mb-3" dir="ltr">
         mohamedghuoma@gmail.com
       </div>
-      <button className="rounded-full border border-[#bcbcbc] px-5 py-1.5 text-[#202c76] text-sm font-medium hover:bg-gray-50 transition mb-2">
+      <Link
+        to="/profile/edit"
+        className="rounded-full border border-[#bcbcbc] px-5 py-1.5 text-[#202c76] text-sm font-medium hover:bg-gray-50 transition mb-2"
+      >
         تعديل الملف الشخصي
-      </button>
+      </Link>
     </div>
 
     {/* Collapsible Sections */}
