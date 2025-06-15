@@ -1,11 +1,11 @@
 
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { phone, mail, facebook, instagram } from "lucide-react";
+import { Phone, Mail, Facebook, Instagram } from "lucide-react"; // <-- أسماء صحيحة
 
 const CONTACTS = [
   {
-    icon: phone,
+    icon: Phone,
     iconBg: "bg-green-100",
     iconColor: "text-green-500",
     label: "WhatsApp",
@@ -13,7 +13,7 @@ const CONTACTS = [
     href: "tel:09000000000",
   },
   {
-    icon: mail,
+    icon: Mail,
     iconBg: "bg-violet-100",
     iconColor: "text-[#202c76]",
     label: "Email",
@@ -21,7 +21,7 @@ const CONTACTS = [
     href: "mailto:khedemni@gmail.com",
   },
   {
-    icon: facebook,
+    icon: Facebook,
     iconBg: "bg-blue-100",
     iconColor: "text-blue-500",
     label: "faceFacebook",
@@ -29,7 +29,7 @@ const CONTACTS = [
     href: "https://facebook.com",
   },
   {
-    icon: instagram,
+    icon: Instagram,
     iconBg: "bg-pink-100",
     iconColor: "text-pink-400",
     label: "Instagram",
