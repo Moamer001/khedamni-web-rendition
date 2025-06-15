@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,12 +44,9 @@ const aboutSections = [
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
 
+  // زر الرجوع يرجع المستخدم مباشرة إلى صفحة الحساب
   const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate("/profile");
-    }
+    navigate("/profile");
   };
 
   return (
@@ -86,3 +84,4 @@ const AboutPage: React.FC = () => {
 };
 
 export default AboutPage;
+
