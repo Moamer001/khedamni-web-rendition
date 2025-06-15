@@ -101,14 +101,14 @@ const Profile = () => (
       {/* More */}
       <Section title="المزيد" icon={User}>
         <div className="px-7 pb-3">
-          <a
-            href="/contact"
-            className="flex items-center gap-2 py-2 text-gray-700 hover:underline"
+          <Link
+            to="/contact"
+            className="flex items-center gap-2 py-2 text-gray-700 hover:underline w-full text-right"
           >
             <Phone className="w-5 h-5" />
             <span className="flex-1">تواصل معنا</span>
             <ChevronLeft className="w-4 h-4 ml-auto" />
-          </a>
+          </Link>
           <button
             className="flex items-center gap-2 py-2 text-gray-700 hover:underline w-full text-right"
             type="button"
