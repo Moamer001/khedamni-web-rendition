@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Eye, person, Calendar } from "lucide-react";
+import { Eye, User, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const professions = [
@@ -98,10 +98,7 @@ const EditProfile = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {/* person icon */}
-              <span className="absolute right-3 text-gray-400 pointer-events-none">
-                {React.createElement(person, { className: "w-5 h-5" })}
-              </span>
+              <User className="absolute right-3 w-5 h-5 text-gray-400 pointer-events-none" />
             </div>
           </div>
           {/* Experience */}
