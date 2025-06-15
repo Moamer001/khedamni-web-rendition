@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -44,12 +43,20 @@ const aboutSections = [
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/profile");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f6f6f9] px-2 py-6" dir="rtl">
       <div className="mx-auto w-full max-w-md bg-white rounded-3xl shadow-sm relative p-0">
         {/* زر الرجوع */}
         <button
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="absolute left-4 top-4 rounded-full bg-white border w-10 h-10 flex items-center justify-center shadow-sm transition hover:bg-gray-50 z-10"
           aria-label="رجوع"
         >
