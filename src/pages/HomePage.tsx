@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Search, User, Home as HomeIcon, Map, Star, CircleUser, PaintRoller, Wrench, Droplets, Hammer, Bolt, Building2, Palette, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -21,24 +20,28 @@ const categories = [
 
 const craftsmen = [
   {
+    id: "1",
     name: "محمد جمال",
     category: "كهرباء",
     img: "https://randomuser.me/api/portraits/men/91.jpg",
     rating: 5,
   },
   {
+    id: "2",
     name: "سالم حسين",
     category: "دهان",
     img: "https://randomuser.me/api/portraits/men/85.jpg",
     rating: 4,
   },
   {
+    id: "3",
     name: "أحمد علي",
     category: "سباكة",
     img: "https://randomuser.me/api/portraits/men/77.jpg",
     rating: 5,
   },
   {
+    id: "4",
     name: "سارة عبدو",
     category: "بناء",
     img: "https://randomuser.me/api/portraits/women/56.jpg",
@@ -147,7 +150,12 @@ const HomePage = () => {
             {craftsmen
               .filter(cr => cr.category === selectedCategory || selectedCategory === "")
               .map(cr => (
-                <div key={cr.name} className="flex flex-col items-center bg-white border border-gray-200 rounded-xl px-4 py-6 min-w-[140px] shadow hover:shadow-md transition">
+                <a
+                  key={cr.id}
+                  href={`/craftsman/${cr.id}`}
+                  className="flex flex-col items-center bg-white border border-gray-200 rounded-xl px-4 py-6 min-w-[140px] shadow hover:shadow-md transition cursor-pointer"
+                  style={{ textDecoration: "none" }}
+                >
                   <img src={cr.img} alt={cr.name} className="w-14 h-14 object-cover rounded-full border-2 border-[#f3b12d] mb-3" />
                   <div className="text-[#202c76] font-semibold mb-1">{cr.name}</div>
                   <div className="text-xs text-gray-400 mb-1">{cr.category}</div>
@@ -161,7 +169,7 @@ const HomePage = () => {
                       />
                     ))}
                   </div>
-                </div>
+                </a>
               ))}
           </div>
         </div>
