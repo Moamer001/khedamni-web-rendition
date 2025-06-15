@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +14,7 @@ import CreateAccount from "./pages/CreateAccount";
 import AccountSuccess from "./pages/AccountSuccess";
 import CompleteProfile from "./pages/CompleteProfile";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +35,7 @@ const App = () => (
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/account-success" element={<AccountSuccess />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,81 +1,50 @@
 
 import React from 'react';
-import { User, Map, House, Wrench, Search, Menu } from 'lucide-react';
+import { User, Home } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const location = useLocation();
-  
+
+  // Define navigation items as per the new design (no map)
   const navItems = [
-    { icon: House, label: 'الصفحة الرئيسية', href: '/' },
-    { icon: Map, label: 'الخطوات', href: '/steps' },
-    { icon: Wrench, label: 'أنت حرفي', href: '/craftsman' },
-    { icon: Search, label: 'أنت تبحث حرفي', href: '/client' },
-    { icon: User, label: 'حسابي', href: '/account' }
+    { icon: User, label: 'حسابي', href: '/profile' },
+    { icon: Home, label: 'الرئيسية', href: '/' },
   ];
 
   return (
-    <header className="relative z-10 px-4 md:px-6 py-3 md:py-4">
+    <header className="relative z-10 px-4 md:px-6 py-3 md:py-4 bg-[#202c76] border-b-4 border-[#f3b12d]">
       <nav className="flex items-center justify-between max-w-7xl mx-auto">
-        {/* Navigation Items - Desktop */}
-        <div className="hidden lg:flex items-center space-x-6 xl:space-x-8 space-x-reverse">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.href}
-              className={`flex items-center space-x-2 space-x-reverse transition-colors duration-300 group ${
-                location.pathname === item.href 
-                  ? 'text-khedamni-orange' 
-                  : 'text-khedamni-white hover:text-khedamni-orange'
-              }`}
-            >
-              <item.icon className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" />
-              <span className="font-medium text-sm xl:text-base">{item.label}</span>
-            </Link>
-          ))}
+        {/* Navigation Items */}
+        <div className="flex items-center space-x-8 space-x-reverse">
+          {navItems.map((item) => {
+            const active = location.pathname === item.href;
+            return (
+              <Link
+                key={item.label}
+                to={item.href}
+                className={
+                  "flex flex-col items-center justify-center px-2 group " +
+                  (active
+                    ? "text-[#f3b12d]"
+                    : "text-white hover:text-[#f3b12d]")
+                }
+                aria-current={active ? 'page' : undefined}
+              >
+                <item.icon
+                  className={`w-6 h-6 mb-1 ${active ? "fill-[#f3b12d]" : ""}`}
+                  strokeWidth={2}
+                  absoluteStrokeWidth
+                />
+                <span className="text-xs font-medium">{item.label}</span>
+              </Link>
+            );
+          })}
         </div>
-
-        {/* Mobile Navigation - Simplified */}
-        <div className="flex lg:hidden items-center space-x-4 space-x-reverse">
-          <Link
-            to="/steps"
-            className={`flex items-center space-x-1 space-x-reverse transition-colors duration-300 ${
-              location.pathname === '/steps' 
-                ? 'text-khedamni-orange' 
-                : 'text-khedamni-white hover:text-khedamni-orange'
-            }`}
-          >
-            <Map className="w-5 h-5" />
-            <span className="text-sm font-medium">الخطوات</span>
-          </Link>
-          <Link
-            to="/craftsman"
-            className={`flex items-center space-x-1 space-x-reverse transition-colors duration-300 ${
-              location.pathname === '/craftsman' 
-                ? 'text-khedamni-orange' 
-                : 'text-khedamni-white hover:text-khedamni-orange'
-            }`}
-          >
-            <Wrench className="w-5 h-5" />
-            <span className="text-sm font-medium">حرفي</span>
-          </Link>
-          <Link
-            to="/client"
-            className={`flex items-center space-x-1 space-x-reverse transition-colors duration-300 ${
-              location.pathname === '/client' 
-                ? 'text-khedamni-orange' 
-                : 'text-khedamni-white hover:text-khedamni-orange'
-            }`}
-          >
-            <Search className="w-5 h-5" />
-            <span className="text-sm font-medium">عميل</span>
-          </Link>
-        </div>
-
-        {/* Logo - Right side */}
+        {/* Logo */}
         <Link to="/" className="flex items-center">
-          <div className="text-khedamni-white text-xl md:text-2xl font-bold">
-            <span className="text-khedamni-orange">K</span>hedamni
+          <div className="text-white text-xl md:text-2xl font-bold">
+            <span className="text-[#f3b12d]">K</span>hedamni
           </div>
         </Link>
       </nav>
