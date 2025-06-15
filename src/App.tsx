@@ -16,6 +16,7 @@ import CompleteProfile from "./pages/CompleteProfile";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import HomePage from "./pages/HomePage";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* الصفحة الجديدة، يمكن تعديل الشرط لاحقًا لتظهر فقط بعد تسجيل الدخول */}
+          <Route path="/home" element={<HomePage />} />
+          {/* باقي المسارات */}
           <Route path="/" element={<Index />} />
           <Route path="/steps" element={<Steps />} />
           <Route path="/craftsman" element={<Craftsman />} />
