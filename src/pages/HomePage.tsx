@@ -18,13 +18,34 @@ const categories = [
   { title: "نجارة", icon: <Hammer className="w-6 h-6" /> },
 ];
 
-const craftsmen = [
+// البيانات الموحدة للحرفيين حتى تُستخدم في التفاصيل أيضاً
+export const craftsmen = [
   {
     id: "1",
     name: "محمد جمال",
     category: "كهرباء",
     img: "https://randomuser.me/api/portraits/men/91.jpg",
     rating: 5,
+    desc: "متخصص في إصلاح وصيانة جميع الأعمال الكهربائية.",
+    details: {
+      experience: "7",
+      gender: "رجل",
+      age: "30",
+      car: "نعم",
+      atHome: "نعم",
+      payment: "نقدي/تحويل",
+    },
+    contact: {
+      phone: "0911111111",
+      email: "mjamel@email.com",
+      city: "طرابلس",
+    },
+    about: "خبرة ممتازة وخدمة سريعة وآمنة في مجال الكهرباء.",
+    works: [
+      { img: "https://images.unsplash.com/photo-1527576539890-dfa815648363?auto=format&fit=facearea&w=400&h=400", name: "لوحة مفاتيح" },
+      { img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=facearea&w=400&h=400", name: "مصابيح إنارة" },
+      { img: "/lovable-uploads/4a21cf4d-60a7-403b-8e5d-f59a984d545d.png", name: "مشروع كهرباء" },
+    ]
   },
   {
     id: "2",
@@ -32,6 +53,26 @@ const craftsmen = [
     category: "دهان",
     img: "https://randomuser.me/api/portraits/men/85.jpg",
     rating: 4,
+    desc: "دهان محترف لجميع أنواع الطلاء.",
+    details: {
+      experience: "5",
+      gender: "رجل",
+      age: "32",
+      car: "لا",
+      atHome: "نعم",
+      payment: "نقدي فقط",
+    },
+    contact: {
+      phone: "0922222222",
+      email: "salim@email.com",
+      city: "بنغازي",
+    },
+    about: "ألوان مميزة وتقنيات حديثة في طلاء الجدران.",
+    works: [
+      { img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400", name: "عمل دهان 1" },
+      { img: "https://images.unsplash.com/photo-1519121784885-2bdb7c0a779a?auto=format&fit=facearea&w=400&h=400", name: "عمل دهان 2" },
+      { img: "/lovable-uploads/4a21cf4d-60a7-403b-8e5d-f59a984d545d.png", name: "عمل دهان 3" },
+    ]
   },
   {
     id: "3",
@@ -39,6 +80,26 @@ const craftsmen = [
     category: "سباكة",
     img: "https://randomuser.me/api/portraits/men/77.jpg",
     rating: 5,
+    desc: "سباك محترف وتصليح أعطال السباكة.",
+    details: {
+      experience: "8",
+      gender: "رجل",
+      age: "35",
+      car: "نعم",
+      atHome: "نعم",
+      payment: "تحويل فقط",
+    },
+    contact: {
+      phone: "0933333333",
+      email: "ahmed@email.com",
+      city: "مصراتة",
+    },
+    about: "أفضل الأدوات وأجود الخامات في السباكة.",
+    works: [
+      { img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=400&h=400", name: "عمل سباكة 1" },
+      { img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400", name: "عمل سباكة 2" },
+      { img: "/lovable-uploads/4a21cf4d-60a7-403b-8e5d-f59a984d545d.png", name: "عمل سباكة 3" },
+    ]
   },
   {
     id: "4",
@@ -46,6 +107,26 @@ const craftsmen = [
     category: "بناء",
     img: "https://randomuser.me/api/portraits/women/56.jpg",
     rating: 4,
+    desc: "بناء وتشطيبات عالية الجودة.",
+    details: {
+      experience: "10",
+      gender: "امرأة",
+      age: "28",
+      car: "لا",
+      atHome: "لا",
+      payment: "نقدي",
+    },
+    contact: {
+      phone: "0944444444",
+      email: "sarah@email.com",
+      city: "سبها",
+    },
+    about: "دقة في التنفيذ وضمان على جميع الأعمال.",
+    works: [
+      { img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400", name: "عمل بناء 1" },
+      { img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=400", name: "عمل بناء 2" },
+      { img: "/lovable-uploads/4a21cf4d-60a7-403b-8e5d-f59a984d545d.png", name: "عمل بناء 3" },
+    ]
   },
 ];
 
@@ -150,9 +231,9 @@ const HomePage = () => {
             {craftsmen
               .filter(cr => cr.category === selectedCategory || selectedCategory === "")
               .map(cr => (
-                <a
+                <Link
                   key={cr.id}
-                  href={`/craftsman/${cr.id}`}
+                  to={`/craftsman/${cr.id}`}
                   className="flex flex-col items-center bg-white border border-gray-200 rounded-xl px-4 py-6 min-w-[140px] shadow hover:shadow-md transition cursor-pointer"
                   style={{ textDecoration: "none" }}
                 >
@@ -169,7 +250,7 @@ const HomePage = () => {
                       />
                     ))}
                   </div>
-                </a>
+                </Link>
               ))}
           </div>
         </div>

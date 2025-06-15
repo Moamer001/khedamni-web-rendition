@@ -3,37 +3,8 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Mail, Phone, MapPin, DollarSign } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
-
-// ديمو للبيانات، في مشروع فعلي تُجلب البيانات بناءً على id
-const demoCraftsmen = [
-  {
-    id: "1",
-    name: "mohamed ghoumah",
-    img: "https://randomuser.me/api/portraits/men/91.jpg",
-    category: "تكييف و تبريد",
-    desc: "تركيب أنظمة التدفئة . تركيب و إصلاح مكيفات الهواء",
-    details: {
-      experience: "10",
-      gender: "رجل",
-      age: "25",
-      car: "نعم",
-      atHome: "نعم",
-      payment: "نقدي",
-    },
-    contact: {
-      phone: "0900000000",
-      email: "mohamedghuoma@gmail.com",
-      city: "طرابلس",
-    },
-    about: "خبير محترف في أنظمة التكييف والتبريد بجودة وكفاءة عالية",
-    rate: 5,
-    works: [
-      { img: "https://images.unsplash.com/photo-1527576539890-dfa815648363?auto=format&fit=facearea&w=400&h=400", name: "عمل 1" },
-      { img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=facearea&w=400&h=400", name: "عمل 2" },
-      { img: "/lovable-uploads/4a21cf4d-60a7-403b-8e5d-f59a984d545d.png", name: "عمل 3" },
-    ]
-  }
-];
+// جلب نفس البيانات من الصفحة الرئيسية
+import { craftsmen } from "./HomePage";
 
 const labelIconStyle = "inline-block align-text-bottom ml-1 text-[#f3b12d]";
 const labelStyle = "mb-2 flex items-center gap-1 text-sm";
@@ -42,8 +13,20 @@ const CraftsmanDetails: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // find craftsman by id, fallback for demo
-  const craftsman = demoCraftsmen.find(cr => cr.id === id) || demoCraftsmen[0];
+  // البحث عن الحرفي بناءا على id
+  const craftsman = craftsmen.find(cr => cr.id === id);
+
+  if (!craftsman) {
+    // في حال لم يوجد حرفي بالرقم المحدد
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f4f4f4]" dir="rtl">
+        <div className="bg-white rounded-xl shadow p-6 text-center text-red-500 font-bold">
+          الحرفي غير موجود
+          <button className="block mt-4 mx-auto px-6 py-2 rounded bg-[#202c76] text-white text-sm" onClick={() => navigate("/home")}>رجوع</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f4f4f4] pb-12" dir="rtl">
@@ -74,7 +57,7 @@ const CraftsmanDetails: React.FC = () => {
           <p className="text-gray-700 text-sm text-center mb-3">{craftsman.desc}</p>
           <div className="flex gap-1 mb-1">
             {[...Array(5)].map((_, i) => (
-              <span key={i} className={i < craftsman.rate ? "text-[#f3b12d]" : "text-gray-200"}>★</span>
+              <span key={i} className={i < craftsman.rating ? "text-[#f3b12d]" : "text-gray-200"}>★</span>
             ))}
           </div>
         </div>
@@ -119,9 +102,11 @@ const CraftsmanDetails: React.FC = () => {
             </div>
           ))}
           {/* مربع زيادة العدد */}
-          <div className="rounded-2xl overflow-hidden bg-[#4746a2]/80 text-white flex items-center justify-center font-bold text-2xl" style={{ width: '80px', height: '80px' }}>
-            +{craftsman.works.length - 2}
-          </div>
+          {craftsman.works.length > 2 && (
+            <div className="rounded-2xl overflow-hidden bg-[#4746a2]/80 text-white flex items-center justify-center font-bold text-2xl" style={{ width: '80px', height: '80px' }}>
+              +{craftsman.works.length - 2}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -129,4 +114,3 @@ const CraftsmanDetails: React.FC = () => {
 };
 
 export default CraftsmanDetails;
-
