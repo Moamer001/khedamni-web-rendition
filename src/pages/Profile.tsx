@@ -62,20 +62,6 @@ const Profile = () => (
 
     {/* Collapsible Sections */}
     <div className="max-w-md w-full mx-auto">
-      {/* About App */}
-      <Section title="عن الموقع" icon={Info}>
-        <div className="px-7 pb-3">
-          <a
-            href="/about"
-            className="flex items-center gap-2 py-3 text-gray-700 hover:underline"
-          >
-            <Info className="w-5 h-5" />
-            <span className="flex-1">حول التطبيق</span>
-            <ChevronLeft className="w-4 h-4 ml-auto" />
-          </a>
-        </div>
-      </Section>
-
       {/* Legal */}
       <Section title="قانوني" icon={FileText}>
         <div className="px-7 pb-3">
@@ -101,6 +87,14 @@ const Profile = () => (
       {/* More */}
       <Section title="المزيد" icon={User}>
         <div className="px-7 pb-3">
+          <a
+            href="/about"
+            className="flex items-center gap-2 py-2 text-gray-700 hover:underline w-full text-right"
+          >
+            <Info className="w-5 h-5" />
+            <span className="flex-1">حول الموقع</span>
+            <ChevronLeft className="w-4 h-4 ml-auto" />
+          </a>
           <Link
             to="/contact"
             className="flex items-center gap-2 py-2 text-gray-700 hover:underline w-full text-right"

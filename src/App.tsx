@@ -19,6 +19,7 @@ import EditProfile from "./pages/EditProfile";
 import HomePage from "./pages/HomePage";
 import ContactPage from "./pages/ContactPage";
 import TermsPage from "./pages/TermsPage";
+import AboutPage from "./pages/AboutPage";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* الصفحة الجديدة: حول الموقع */}
+          <Route path="/about" element={<AboutPage />} />
           {/* الصفحة الجديدة: تواصل معنا */}
           <Route path="/contact" element={<ContactPage />} />
           {/* باقي المسارات */}
