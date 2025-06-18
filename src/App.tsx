@@ -21,6 +21,9 @@ import ContactPage from "./pages/ContactPage";
 import TermsPage from "./pages/TermsPage";
 import AboutPage from "./pages/AboutPage";
 import CraftsmanDetails from "./pages/CraftsmanDetails";
+import Auth from "./pages/Auth";
+import NewHomePage from "./pages/NewHomePage";
+import NewCraftsmanDetails from "./pages/NewCraftsmanDetails";
 
 const queryClient = new QueryClient();
 
@@ -31,13 +34,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* الصفحة الجديدة: تفاصيل الحرفي */}
-          <Route path="/craftsman/:id" element={<CraftsmanDetails />} />
-          {/* الصفحة الجديدة: حول الموقع */}
-          <Route path="/about" element={<AboutPage />} />
-          {/* الصفحة الجديدة: تواصل معنا */}
-          <Route path="/contact" element={<ContactPage />} />
-          {/* باقي المسارات */}
+          {/* الصفحات الجديدة */}
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/new-home" element={<NewHomePage />} />
+          <Route path="/craftsman/:id" element={<NewCraftsmanDetails />} />
+          
+          {/* الصفحات الموجودة */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<Index />} />
           <Route path="/steps" element={<Steps />} />
