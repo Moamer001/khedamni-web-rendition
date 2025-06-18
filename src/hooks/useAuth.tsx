@@ -32,6 +32,7 @@ export function useAuth() {
 
   const signIn = async (email: string, password: string) => {
     try {
+      setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -52,20 +53,78 @@ export function useAuth() {
         variant: "destructive",
       });
       return { data: null, error };
+    } finally {
+      setLoading(false);
     }
   };
 
   const signUp = async (email: string, password: string, userData: any) => {
     try {
+      setLoading(true);
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: userData,
+          data: {
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            phone: userData.phone,
+            user_type: userData.user_type,
+            gender: userData.gender,
+            city_id: userData.city_id
+          },
+          emailRedirectTo: `${window.location.origin}/new-home`
         },
       });
       
       if (error) throw error;
+      
+      // إذا تم إنشاء المستخدم بنجاح، قم بإنشاء/تحديث الملف الشخصي
+      if (data.user) {
+        // انتظار قليل للتأكد من إنشاء المستخدم في auth.users
+        setTimeout(async () => {
+          try {
+            const { error: profileError } = await supabase
+              .from('profiles')
+              .upsert({
+                id: data.user.id,
+                first_name: userData.first_name,
+                last_name: userData.last_name,
+                email: email,
+                phone: userData.phone,
+                user_type: userData.user_type,
+                gender: userData.gender,
+                city_id: userData.city_id
+              }, {
+                onConflict: 'id'
+              });
+
+            if (profileError) {
+              console.error('Profile creation error:', profileError);
+            }
+
+            // إذا كان المستخدم حرفي، أنشئ سجل في جدول الحرفيين
+            if (userData.user_type === 'craftsman') {
+              const { error: craftsmanError } = await supabase
+                .from('craftsmen')
+                .insert({
+                  user_id: data.user.id,
+                  category_id: userData.category_id || null,
+                  experience_years: 0,
+                  rating: 0.0,
+                  total_reviews: 0,
+                  is_verified: false
+                });
+
+              if (craftsmanError) {
+                console.error('Craftsman creation error:', craftsmanError);
+              }
+            }
+          } catch (err) {
+            console.error('Error creating profile:', err);
+          }
+        }, 1000);
+      }
       
       toast({
         title: "تم إنشاء الحساب بنجاح",
@@ -80,6 +139,8 @@ export function useAuth() {
         variant: "destructive",
       });
       return { data: null, error };
+    } finally {
+      setLoading(false);
     }
   };
 

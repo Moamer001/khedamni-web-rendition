@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Filter, Star, MapPin, Phone, MessageCircle } from 'lucide-react';
+import { Search, Filter, Star, MapPin, Phone, MessageCircle, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -33,6 +33,11 @@ const NewHomePage = () => {
     return matchesSearch && matchesCategory && matchesCity;
   });
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/auth');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
       {/* Header */}
@@ -44,7 +49,7 @@ const NewHomePage = () => {
             </Link>
             
             <nav className="hidden md:flex space-x-8 space-x-reverse">
-              <Link to="/home" className="text-gray-700 hover:text-khedamni-blue">الرئيسية</Link>
+              <Link to="/new-home" className="text-gray-700 hover:text-khedamni-blue">الرئيسية</Link>
               <Link to="/about" className="text-gray-700 hover:text-khedamni-blue">من نحن</Link>
               <Link to="/contact" className="text-gray-700 hover:text-khedamni-blue">اتصل بنا</Link>
             </nav>
@@ -52,9 +57,14 @@ const NewHomePage = () => {
             <div className="flex items-center gap-3">
               {user ? (
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-600">مرحباً، {user.email}</span>
+                  <Link to="/profile">
+                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      <span>حسابي</span>
+                    </Button>
+                  </Link>
                   <Button
-                    onClick={signOut}
+                    onClick={handleSignOut}
                     variant="outline"
                     size="sm"
                     className="text-sm"

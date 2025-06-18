@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,16 +7,18 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/hooks/useAuth';
 import { useCities } from '@/hooks/useCities';
+import { useCategories } from '@/hooks/useCategories';
 import { Eye, EyeOff, Mail } from 'lucide-react';
 
 const Auth = () => {
   const navigate = useNavigate();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user, loading } = useAuth();
   const { data: cities } = useCities();
+  const { data: categories } = useCategories();
   
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     email: '',
@@ -26,8 +28,16 @@ const Auth = () => {
     phone: '',
     userType: 'client' as 'client' | 'craftsman',
     gender: '',
-    cityId: ''
+    cityId: '',
+    categoryId: ''
   });
+
+  // إذا كان المستخدم مسجل دخول، وجهه للصفحة الرئيسية
+  useEffect(() => {
+    if (user && !loading) {
+      navigate('/new-home');
+    }
+  }, [user, loading, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -38,13 +48,13 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setFormLoading(true);
 
     try {
       if (isLogin) {
         const { data, error } = await signIn(formData.email, formData.password);
         if (data && !error) {
-          navigate('/home');
+          navigate('/new-home');
         }
       } else {
         const userData = {
@@ -53,16 +63,17 @@ const Auth = () => {
           phone: formData.phone,
           user_type: formData.userType,
           gender: formData.gender,
-          city_id: formData.cityId
+          city_id: formData.cityId,
+          category_id: formData.userType === 'craftsman' ? formData.categoryId : null
         };
         
         const { data, error } = await signUp(formData.email, formData.password, userData);
         if (data && !error) {
-          navigate('/home');
+          navigate('/new-home');
         }
       }
     } finally {
-      setLoading(false);
+      setFormLoading(false);
     }
   };
 
@@ -88,10 +99,10 @@ const Auth = () => {
                   <Label htmlFor="lastName" className="text-right block arabic-text">اللقب:</Label>
                   <Input
                     id="lastName"
-                    name="lastName"
+                    name="firstName"
                     type="text"
                     value={formData.lastName}
-                    onChange={handleInputChange}
+                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                     className="w-full text-right"
                     dir="rtl"
                     placeholder="أدخل اللقب"
@@ -102,10 +113,10 @@ const Auth = () => {
                   <Label htmlFor="firstName" className="text-right block arabic-text">الاسم:</Label>
                   <Input
                     id="firstName"
-                    name="firstName"
+                    name="lastName"
                     type="text"
                     value={formData.firstName}
-                    onChange={handleInputChange}
+                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                     className="w-full text-right"
                     dir="rtl"
                     placeholder="أدخل الاسم"
@@ -121,7 +132,7 @@ const Auth = () => {
                   name="phone"
                   type="tel"
                   value={formData.phone}
-                  onChange={handleInputChange}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   className="w-full text-right"
                   dir="rtl"
                   placeholder="0123456789"
@@ -168,6 +179,22 @@ const Auth = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              {formData.userType === 'craftsman' && (
+                <div className="space-y-2">
+                  <Label className="text-right block arabic-text">التخصص:</Label>
+                  <Select onValueChange={(value) => setFormData({...formData, categoryId: value})}>
+                    <SelectTrigger className="w-full text-right" dir="rtl">
+                      <SelectValue placeholder="اختر تخصصك" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories?.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </>
           )}
 
@@ -215,10 +242,10 @@ const Auth = () => {
 
           <Button
             type="submit"
-            disabled={loading}
+            disabled={formLoading || loading}
             className="w-full bg-khedamni-blue hover:bg-blue-700 text-white py-3 rounded-lg font-medium arabic-text"
           >
-            {loading ? '...' : (isLogin ? 'تسجيل الدخول' : 'إنشاء حساب')}
+            {formLoading || loading ? 'جاري المعالجة...' : (isLogin ? 'تسجيل الدخول' : 'إنشاء حساب')}
           </Button>
         </form>
 
