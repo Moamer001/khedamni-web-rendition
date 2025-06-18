@@ -39,13 +39,6 @@ const Auth = () => {
     }
   }, [user, loading, navigate]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormLoading(true);
@@ -69,7 +62,9 @@ const Auth = () => {
         
         const { data, error } = await signUp(formData.email, formData.password, userData);
         if (data && !error) {
-          navigate('/new-home');
+          // بعد التسجيل الناجح، انتقل لصفحة تسجيل الدخول
+          setIsLogin(true);
+          setFormData(prev => ({ ...prev, password: '' }));
         }
       }
     } finally {
@@ -82,8 +77,9 @@ const Auth = () => {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block mb-6">
-            <div className="text-khedamni-blue text-2xl font-bold">
-              <span className="text-khedamni-orange">خ</span>دمني
+            <div className="text-2xl font-bold">
+              <span className="text-orange-500">خ</span>
+              <span className="text-blue-600">دمني</span>
             </div>
           </Link>
           <h1 className="text-xl font-bold text-gray-800 arabic-text">
@@ -99,7 +95,6 @@ const Auth = () => {
                   <Label htmlFor="lastName" className="text-right block arabic-text">اللقب:</Label>
                   <Input
                     id="lastName"
-                    name="firstName"
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
@@ -113,7 +108,6 @@ const Auth = () => {
                   <Label htmlFor="firstName" className="text-right block arabic-text">الاسم:</Label>
                   <Input
                     id="firstName"
-                    name="lastName"
                     type="text"
                     value={formData.firstName}
                     onChange={(e) => setFormData({...formData, firstName: e.target.value})}
@@ -129,7 +123,6 @@ const Auth = () => {
                 <Label htmlFor="phone" className="text-right block arabic-text">رقم الهاتف:</Label>
                 <Input
                   id="phone"
-                  name="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -203,10 +196,9 @@ const Auth = () => {
             <div className="relative">
               <Input
                 id="email"
-                name="email"
                 type="email"
                 value={formData.email}
-                onChange={handleInputChange}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
                 className="w-full text-right pr-10"
                 dir="rtl"
                 placeholder="أدخل بريدك الإلكتروني"
@@ -221,10 +213,9 @@ const Auth = () => {
             <div className="relative">
               <Input
                 id="password"
-                name="password"
                 type={showPassword ? 'text' : 'password'}
                 value={formData.password}
-                onChange={handleInputChange}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
                 className="w-full text-right pr-10"
                 dir="rtl"
                 placeholder="أدخل كلمة المرور"
@@ -243,7 +234,7 @@ const Auth = () => {
           <Button
             type="submit"
             disabled={formLoading || loading}
-            className="w-full bg-khedamni-blue hover:bg-blue-700 text-white py-3 rounded-lg font-medium arabic-text"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium arabic-text"
           >
             {formLoading || loading ? 'جاري المعالجة...' : (isLogin ? 'تسجيل الدخول' : 'إنشاء حساب')}
           </Button>
@@ -252,7 +243,7 @@ const Auth = () => {
         <div className="mt-6 text-center">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-khedamni-blue hover:underline text-sm arabic-text"
+            className="text-blue-600 hover:underline text-sm arabic-text"
           >
             {isLogin ? 'ليس لديك حساب؟ أنشئ حساباً جديداً' : 'لديك حساب؟ سجل دخولك'}
           </button>
