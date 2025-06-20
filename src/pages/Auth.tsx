@@ -35,6 +35,7 @@ const Auth = () => {
   // إذا كان المستخدم مسجل دخول، وجهه للصفحة الرئيسية
   useEffect(() => {
     if (user && !loading) {
+      console.log('User is logged in, redirecting to /new-home');
       navigate('/new-home');
     }
   }, [user, loading, navigate]);
@@ -42,31 +43,56 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormLoading(true);
+    console.log('Form submitted:', { isLogin, formData });
 
     try {
       if (isLogin) {
+        console.log('Attempting login...');
         const { data, error } = await signIn(formData.email, formData.password);
         if (data && !error) {
+          console.log('Login successful, redirecting...');
           navigate('/new-home');
         }
       } else {
+        console.log('Attempting signup...');
+        
+        // التحقق من صحة البيانات المطلوبة
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+          alert('يرجى ملء جميع الحقول المطلوبة');
+          return;
+        }
+
         const userData = {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           phone: formData.phone,
-          user_type: formData.userType,
-          gender: formData.gender,
-          city_id: formData.cityId,
-          category_id: formData.userType === 'craftsman' ? formData.categoryId : null
+          userType: formData.userType,
+          gender: formData.gender || null,
+          cityId: formData.cityId || null,
+          categoryId: formData.userType === 'craftsman' ? formData.categoryId : null
         };
+        
+        console.log('User data for signup:', userData);
         
         const { data, error } = await signUp(formData.email, formData.password, userData);
         if (data && !error) {
-          // بعد التسجيل الناجح، انتقل لصفحة تسجيل الدخول
+          console.log('Signup successful');
+          // عرض رسالة نجاح والانتقال لصفحة تسجيل الدخول
           setIsLogin(true);
-          setFormData(prev => ({ ...prev, password: '' }));
+          setFormData(prev => ({ 
+            ...prev, 
+            password: '',
+            firstName: '',
+            lastName: '',
+            phone: '',
+            gender: '',
+            cityId: '',
+            categoryId: ''
+          }));
         }
       }
+    } catch (error) {
+      console.error('Form submission error:', error);
     } finally {
       setFormLoading(false);
     }
@@ -92,7 +118,7 @@ const Auth = () => {
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="lastName" className="text-right block arabic-text">اللقب:</Label>
+                  <Label htmlFor="lastName" className="text-right block arabic-text">اللقب *:</Label>
                   <Input
                     id="lastName"
                     type="text"
@@ -105,7 +131,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-right block arabic-text">الاسم:</Label>
+                  <Label htmlFor="firstName" className="text-right block arabic-text">الاسم *:</Label>
                   <Input
                     id="firstName"
                     type="text"
@@ -146,7 +172,7 @@ const Auth = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-right block arabic-text">نوع الحساب:</Label>
+                  <Label className="text-right block arabic-text">نوع الحساب *:</Label>
                   <Select onValueChange={(value: 'client' | 'craftsman') => setFormData({...formData, userType: value})}>
                     <SelectTrigger className="w-full text-right" dir="rtl">
                       <SelectValue placeholder="اختر نوع الحساب" />
@@ -175,7 +201,7 @@ const Auth = () => {
 
               {formData.userType === 'craftsman' && (
                 <div className="space-y-2">
-                  <Label className="text-right block arabic-text">التخصص:</Label>
+                  <Label className="text-right block arabic-text">التخصص *:</Label>
                   <Select onValueChange={(value) => setFormData({...formData, categoryId: value})}>
                     <SelectTrigger className="w-full text-right" dir="rtl">
                       <SelectValue placeholder="اختر تخصصك" />
@@ -192,7 +218,7 @@ const Auth = () => {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-right block arabic-text">البريد الإلكتروني:</Label>
+            <Label htmlFor="email" className="text-right block arabic-text">البريد الإلكتروني *:</Label>
             <div className="relative">
               <Input
                 id="email"
@@ -209,7 +235,7 @@ const Auth = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-right block arabic-text">كلمة المرور:</Label>
+            <Label htmlFor="password" className="text-right block arabic-text">كلمة المرور *:</Label>
             <div className="relative">
               <Input
                 id="password"
