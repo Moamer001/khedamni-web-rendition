@@ -40,6 +40,34 @@ const Auth = () => {
     }
   }, [user, loading, navigate]);
 
+  const validateSignupForm = () => {
+    if (!formData.firstName.trim()) {
+      alert('يرجى إدخال الاسم الأول');
+      return false;
+    }
+    if (!formData.lastName.trim()) {
+      alert('يرجى إدخال اسم العائلة');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      alert('يرجى إدخال البريد الإلكتروني');
+      return false;
+    }
+    if (!formData.password.trim()) {
+      alert('يرجى إدخال كلمة المرور');
+      return false;
+    }
+    if (!formData.userType) {
+      alert('يرجى اختيار نوع الحساب');
+      return false;
+    }
+    if (formData.userType === 'craftsman' && !formData.categoryId) {
+      alert('يرجى اختيار التخصص للحرفي');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormLoading(true);
@@ -56,16 +84,14 @@ const Auth = () => {
       } else {
         console.log('Attempting signup...');
         
-        // التحقق من صحة البيانات المطلوبة
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
-          alert('يرجى ملء جميع الحقول المطلوبة');
+        if (!validateSignupForm()) {
           return;
         }
 
         const userData = {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          phone: formData.phone.trim(),
           userType: formData.userType,
           gender: formData.gender || null,
           cityId: formData.cityId || null,
@@ -74,7 +100,7 @@ const Auth = () => {
         
         console.log('User data for signup:', userData);
         
-        const { data, error } = await signUp(formData.email, formData.password, userData);
+        const { data, error } = await signUp(formData.email.trim(), formData.password, userData);
         if (data && !error) {
           console.log('Signup successful');
           // عرض رسالة نجاح والانتقال لصفحة تسجيل الدخول
@@ -161,7 +187,7 @@ const Auth = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-right block arabic-text">الجنس:</Label>
-                  <Select onValueChange={(value) => setFormData({...formData, gender: value})}>
+                  <Select value={formData.gender} onValueChange={(value) => setFormData({...formData, gender: value})}>
                     <SelectTrigger className="w-full text-right" dir="rtl">
                       <SelectValue placeholder="اختر جنسك" />
                     </SelectTrigger>
@@ -173,7 +199,7 @@ const Auth = () => {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-right block arabic-text">نوع الحساب *:</Label>
-                  <Select onValueChange={(value: 'client' | 'craftsman') => setFormData({...formData, userType: value})}>
+                  <Select value={formData.userType} onValueChange={(value: 'client' | 'craftsman') => setFormData({...formData, userType: value})}>
                     <SelectTrigger className="w-full text-right" dir="rtl">
                       <SelectValue placeholder="اختر نوع الحساب" />
                     </SelectTrigger>
@@ -187,7 +213,7 @@ const Auth = () => {
 
               <div className="space-y-2">
                 <Label className="text-right block arabic-text">المدينة:</Label>
-                <Select onValueChange={(value) => setFormData({...formData, cityId: value})}>
+                <Select value={formData.cityId} onValueChange={(value) => setFormData({...formData, cityId: value})}>
                   <SelectTrigger className="w-full text-right" dir="rtl">
                     <SelectValue placeholder="اختر مدينتك" />
                   </SelectTrigger>
@@ -202,7 +228,7 @@ const Auth = () => {
               {formData.userType === 'craftsman' && (
                 <div className="space-y-2">
                   <Label className="text-right block arabic-text">التخصص *:</Label>
-                  <Select onValueChange={(value) => setFormData({...formData, categoryId: value})}>
+                  <Select value={formData.categoryId} onValueChange={(value) => setFormData({...formData, categoryId: value})}>
                     <SelectTrigger className="w-full text-right" dir="rtl">
                       <SelectValue placeholder="اختر تخصصك" />
                     </SelectTrigger>

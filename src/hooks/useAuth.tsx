@@ -73,18 +73,18 @@ export function useAuth() {
       setLoading(true);
       console.log('Attempting to sign up with:', { email, userData });
       
-      // تنظيف البيانات قبل الإرسال
+      // تنظيف وتنسيق البيانات
       const cleanUserData = {
-        first_name: userData.first_name || userData.firstName || '',
-        last_name: userData.last_name || userData.lastName || '',
-        phone: userData.phone || '',
-        user_type: userData.user_type || userData.userType || 'client',
+        first_name: userData.firstName?.toString() || '',
+        last_name: userData.lastName?.toString() || '',
+        phone: userData.phone?.toString() || '',
+        user_type: userData.userType || 'client',
         gender: userData.gender || null,
-        city_id: userData.city_id || userData.cityId || null,
-        category_id: userData.category_id || userData.categoryId || null
+        city_id: userData.cityId || null,
+        category_id: userData.userType === 'craftsman' ? (userData.categoryId || null) : null
       };
 
-      console.log('Clean user data:', cleanUserData);
+      console.log('Clean user data for signup:', cleanUserData);
 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -102,11 +102,10 @@ export function useAuth() {
       
       console.log('Sign up successful:', data);
 
-      // إذا كان المستخدم من نوع حرفي، إنشاء سجل في جدول craftsmen
-      if (data.user && cleanUserData.user_type === 'craftsman') {
+      // إنشاء سجل حرفي إذا كان نوع المستخدم حرفي
+      if (data.user && cleanUserData.user_type === 'craftsman' && cleanUserData.category_id) {
         console.log('Creating craftsman record...');
         
-        // انتظار قليل للتأكد من إنشاء profile أولاً
         setTimeout(async () => {
           try {
             const { error: craftsmanError } = await supabase
