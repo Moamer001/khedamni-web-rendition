@@ -7,19 +7,29 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, EyeOff, Mail } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useCities } from '@/hooks/useCities';
+import { useCategories } from '@/hooks/useCategories';
 
 const CreateAccount = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const role = searchParams.get('role');
+  const { signUp, loading } = useAuth();
+  const { data: cities } = useCities();
+  const { data: categories } = useCategories();
   
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     gender: '',
     email: '',
+    phone: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    userType: (role === 'craftsman' ? 'craftsman' : 'client') as 'client' | 'craftsman',
+    cityId: '',
+    categoryId: ''
   });
   
   const [showPassword, setShowPassword] = useState(false);
@@ -41,15 +51,15 @@ const CreateAccount = () => {
     }
   };
 
-  const handleGenderChange = (value: string) => {
+  const handleSelectChange = (field: string, value: string) => {
     setFormData({
       ...formData,
-      gender: value
+      [field]: value
     });
-    if (errors.gender) {
+    if (errors[field]) {
       setErrors({
         ...errors,
-        gender: ''
+        [field]: ''
       });
     }
   };
@@ -59,12 +69,15 @@ const CreateAccount = () => {
 
     if (!formData.firstName.trim()) newErrors.firstName = 'الاسم الأول مطلوب';
     if (!formData.lastName.trim()) newErrors.lastName = 'اسم العائلة مطلوب';
-    if (!formData.gender) newErrors.gender = 'الجنس مطلوب';
     if (!formData.email.trim()) newErrors.email = 'البريد الإلكتروني مطلوب';
     if (!formData.password) newErrors.password = 'كلمة المرور مطلوبة';
     if (!formData.confirmPassword) newErrors.confirmPassword = 'تأكيد كلمة المرور مطلوب';
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'كلمات المرور غير متطابقة';
+    }
+    if (!formData.userType) newErrors.userType = 'نوع الحساب مطلوب';
+    if (formData.userType === 'craftsman' && !formData.categoryId) {
+      newErrors.categoryId = 'يرجى اختيار التخصص للحرفي';
     }
     if (!agreeToTerms) newErrors.terms = 'يجب الموافقة على شروط الاستخدام';
 
@@ -72,28 +85,43 @@ const CreateAccount = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleCreateAccount = () => {
-    if (validateForm()) {
-      navigate('/account-success');
+  const handleCreateAccount = async () => {
+    if (!validateForm()) return;
+
+    const userData = {
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      phone: formData.phone.trim(),
+      userType: formData.userType,
+      gender: formData.gender || null,
+      cityId: formData.cityId || null,
+      categoryId: formData.userType === 'craftsman' ? formData.categoryId : null
+    };
+
+    const { data, error } = await signUp(formData.email.trim(), formData.password, userData);
+    
+    if (!error && data) {
+      navigate('/auth');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8" dir="rtl">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block mb-6">
-            <div className="text-khedamni-blue text-2xl font-bold">
-              <span className="text-khedamni-orange">K</span>hedamni
+            <div className="text-2xl font-bold">
+              <span className="text-orange-500">خ</span>
+              <span className="text-blue-600">دمني</span>
             </div>
           </Link>
-          <h1 className="text-xl font-bold text-gray-800 arabic-text">إنشاء حساب</h1>
+          <h1 className="text-xl font-bold text-gray-800 arabic-text">إنشاء حساب جديد</h1>
         </div>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="lastName" className="text-right block arabic-text">اللقب:</Label>
+              <Label htmlFor="lastName" className="text-right block arabic-text">اللقب *:</Label>
               <Input
                 id="lastName"
                 name="lastName"
@@ -107,7 +135,7 @@ const CreateAccount = () => {
               {errors.lastName && <p className="text-red-500 text-xs text-right">{errors.lastName}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="firstName" className="text-right block arabic-text">الاسم:</Label>
+              <Label htmlFor="firstName" className="text-right block arabic-text">الاسم *:</Label>
               <Input
                 id="firstName"
                 name="firstName"
@@ -122,10 +150,42 @@ const CreateAccount = () => {
             </div>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-right block arabic-text">البريد الإلكتروني *:</Label>
+            <div className="relative">
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full text-right pr-10"
+                dir="rtl"
+                placeholder="أدخل بريدك الإلكتروني"
+              />
+              <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            </div>
+            {errors.email && <p className="text-red-500 text-xs text-right">{errors.email}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="text-right block arabic-text">رقم الهاتف:</Label>
+            <Input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={handleInputChange}
+              className="w-full text-right"
+              dir="rtl"
+              placeholder="0123456789"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-right block arabic-text">الجنس:</Label>
-              <Select onValueChange={handleGenderChange}>
+              <Select value={formData.gender} onValueChange={(value) => handleSelectChange('gender', value)}>
                 <SelectTrigger className="w-full text-right" dir="rtl">
                   <SelectValue placeholder="اختر جنسك" />
                 </SelectTrigger>
@@ -137,26 +197,53 @@ const CreateAccount = () => {
               {errors.gender && <p className="text-red-500 text-xs text-right">{errors.gender}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-right block arabic-text">البريد الإلكتروني:</Label>
-              <div className="relative">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full text-right pr-10"
-                  dir="rtl"
-                  placeholder="أدخل بريدك الإلكتروني"
-                />
-                <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              </div>
-              {errors.email && <p className="text-red-500 text-xs text-right">{errors.email}</p>}
+              <Label className="text-right block arabic-text">نوع الحساب *:</Label>
+              <Select value={formData.userType} onValueChange={(value: 'client' | 'craftsman') => handleSelectChange('userType', value)}>
+                <SelectTrigger className="w-full text-right" dir="rtl">
+                  <SelectValue placeholder="اختر نوع الحساب" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="client">عميل</SelectItem>
+                  <SelectItem value="craftsman">حرفي</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.userType && <p className="text-red-500 text-xs text-right">{errors.userType}</p>}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-right block arabic-text">كلمة المرور:</Label>
+            <Label className="text-right block arabic-text">المدينة:</Label>
+            <Select value={formData.cityId} onValueChange={(value) => handleSelectChange('cityId', value)}>
+              <SelectTrigger className="w-full text-right" dir="rtl">
+                <SelectValue placeholder="اختر مدينتك" />
+              </SelectTrigger>
+              <SelectContent>
+                {cities?.map((city) => (
+                  <SelectItem key={city.id} value={city.id}>{city.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {formData.userType === 'craftsman' && (
+            <div className="space-y-2">
+              <Label className="text-right block arabic-text">التخصص *:</Label>
+              <Select value={formData.categoryId} onValueChange={(value) => handleSelectChange('categoryId', value)}>
+                <SelectTrigger className="w-full text-right" dir="rtl">
+                  <SelectValue placeholder="اختر تخصصك" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.categoryId && <p className="text-red-500 text-xs text-right">{errors.categoryId}</p>}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-right block arabic-text">كلمة المرور *:</Label>
             <div className="relative">
               <Input
                 id="password"
@@ -180,7 +267,7 @@ const CreateAccount = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-right block arabic-text">تأكيد كلمة المرور:</Label>
+            <Label htmlFor="confirmPassword" className="text-right block arabic-text">تأكيد كلمة المرور *:</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
@@ -217,10 +304,17 @@ const CreateAccount = () => {
 
           <Button
             onClick={handleCreateAccount}
-            className="w-full bg-khedamni-blue hover:bg-blue-700 text-white py-3 rounded-lg font-medium arabic-text"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium arabic-text"
           >
-            إنشاء حساب
+            {loading ? 'جاري إنشاء الحساب...' : 'إنشاء حساب'}
           </Button>
+
+          <div className="text-center mt-4">
+            <Link to="/auth" className="text-blue-600 hover:underline text-sm arabic-text">
+              لديك حساب؟ سجل دخولك
+            </Link>
+          </div>
         </div>
       </div>
     </div>

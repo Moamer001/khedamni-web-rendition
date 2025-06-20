@@ -7,7 +7,7 @@ const HeroSection = () => {
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
-    navigate('/login');
+    navigate('/auth');
   };
 
   return (
