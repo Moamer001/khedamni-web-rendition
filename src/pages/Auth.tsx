@@ -41,30 +41,35 @@ const Auth = () => {
   }, [user, loading, navigate]);
 
   const validateSignupForm = () => {
+    const errors = [];
+    
     if (!formData.firstName.trim()) {
-      alert('يرجى إدخال الاسم الأول');
-      return false;
+      errors.push('الاسم الأول مطلوب');
     }
     if (!formData.lastName.trim()) {
-      alert('يرجى إدخال اسم العائلة');
-      return false;
+      errors.push('اسم العائلة مطلوب');
     }
     if (!formData.email.trim()) {
-      alert('يرجى إدخال البريد الإلكتروني');
-      return false;
+      errors.push('البريد الإلكتروني مطلوب');
     }
     if (!formData.password.trim()) {
-      alert('يرجى إدخال كلمة المرور');
-      return false;
+      errors.push('كلمة المرور مطلوبة');
+    }
+    if (formData.password.length < 6) {
+      errors.push('كلمة المرور يجب أن تكون على الأقل 6 أحرف');
     }
     if (!formData.userType) {
-      alert('يرجى اختيار نوع الحساب');
-      return false;
+      errors.push('نوع الحساب مطلوب');
     }
     if (formData.userType === 'craftsman' && !formData.categoryId) {
-      alert('يرجى اختيار التخصص للحرفي');
+      errors.push('التخصص مطلوب للحرفي');
+    }
+    
+    if (errors.length > 0) {
+      alert(errors.join('\n'));
       return false;
     }
+    
     return true;
   };
 
@@ -76,6 +81,11 @@ const Auth = () => {
     try {
       if (isLogin) {
         console.log('Attempting login...');
+        if (!formData.email.trim() || !formData.password.trim()) {
+          alert('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+          return;
+        }
+        
         const { data, error } = await signIn(formData.email, formData.password);
         if (data && !error) {
           console.log('Login successful, redirecting...');

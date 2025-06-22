@@ -73,21 +73,26 @@ export function useAuth() {
       setLoading(true);
       console.log('Attempting to sign up with:', { email, userData });
       
-      // تنظيف وتنسيق البيانات
+      // التأكد من صحة البيانات قبل الإرسال
       const cleanUserData = {
-        first_name: userData.firstName?.toString() || '',
-        last_name: userData.lastName?.toString() || '',
-        phone: userData.phone?.toString() || '',
+        first_name: userData.firstName?.toString().trim() || '',
+        last_name: userData.lastName?.toString().trim() || '',
+        phone: userData.phone?.toString().trim() || '',
         user_type: userData.userType || 'client',
         gender: userData.gender || null,
         city_id: userData.cityId || null,
         category_id: userData.userType === 'craftsman' ? (userData.categoryId || null) : null
       };
 
+      // التأكد من وجود البيانات الأساسية
+      if (!cleanUserData.first_name || !cleanUserData.last_name) {
+        throw new Error('الاسم الأول واسم العائلة مطلوبان');
+      }
+
       console.log('Clean user data for signup:', cleanUserData);
 
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
           data: cleanUserData,
@@ -106,6 +111,7 @@ export function useAuth() {
       if (data.user && cleanUserData.user_type === 'craftsman' && cleanUserData.category_id) {
         console.log('Creating craftsman record...');
         
+        // انتظار قليل للتأكد من إنشاء الملف الشخصي أولاً
         setTimeout(async () => {
           try {
             const { error: craftsmanError } = await supabase
@@ -144,9 +150,22 @@ export function useAuth() {
       return { data, error: null };
     } catch (error: any) {
       console.error('Sign up error:', error);
+      let errorMessage = error.message;
+      
+      // تحسين رسائل الخطأ
+      if (error.message.includes('already exists')) {
+        errorMessage = 'هذا البريد الإلكتروني مستخدم مسبقاً';
+      } else if (error.message.includes('Password should be at least')) {
+        errorMessage = 'كلمة المرور يجب أن تكون على الأقل 6 أحرف';
+      } else if (error.message.includes('Invalid email')) {
+        errorMessage = 'البريد الإلكتروني غير صحيح';
+      } else if (error.message.includes('Database error')) {
+        errorMessage = 'خطأ في قاعدة البيانات، يرجى المحاولة مرة أخرى';
+      }
+      
       toast({
         title: "خطأ في إنشاء الحساب",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
       return { data: null, error };
