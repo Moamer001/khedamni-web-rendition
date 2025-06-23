@@ -134,6 +134,10 @@ const Auth = () => {
     }
   };
 
+  // Filter out items with empty or invalid IDs
+  const validCities = cities?.filter(city => city.id && city.id.trim() !== '') || [];
+  const validCategories = categories?.filter(category => category.id && category.id.trim() !== '') || [];
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8" dir="rtl">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
@@ -228,7 +232,7 @@ const Auth = () => {
                     <SelectValue placeholder="اختر مدينتك" />
                   </SelectTrigger>
                   <SelectContent>
-                    {cities?.map((city) => (
+                    {validCities.map((city) => (
                       <SelectItem key={city.id} value={city.id}>{city.name}</SelectItem>
                     ))}
                   </SelectContent>
@@ -243,7 +247,7 @@ const Auth = () => {
                       <SelectValue placeholder="اختر تخصصك" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories?.map((category) => (
+                      {validCategories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
                       ))}
                     </SelectContent>

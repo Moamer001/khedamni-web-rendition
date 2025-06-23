@@ -51,6 +51,27 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          email: string
+          full_name: string
+          id: number
+          phone: string
+        }
+        Insert: {
+          email: string
+          full_name: string
+          id?: never
+          phone: string
+        }
+        Update: {
+          email?: string
+          full_name?: string
+          id?: never
+          phone?: string
+        }
+        Relationships: []
+      }
       craftsman_works: {
         Row: {
           craftsman_id: string
