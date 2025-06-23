@@ -21,6 +21,10 @@ const NewHomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
 
+  // Filter out items with empty or invalid IDs
+  const validCities = cities?.filter(city => city.id && city.id.trim() !== '') || [];
+  const validCategories = categories?.filter(category => category.id && category.id.trim() !== '') || [];
+
   const filteredCraftsmen = craftsmen?.filter(craftsman => {
     const matchesSearch = searchTerm === '' || 
       craftsman.profiles.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,7 +121,7 @@ const NewHomePage = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">جميع المهن</SelectItem>
-                {categories?.map((category) => (
+                {validCategories.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name}
                   </SelectItem>
@@ -131,7 +135,7 @@ const NewHomePage = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">جميع المدن</SelectItem>
-                {cities?.map((city) => (
+                {validCities.map((city) => (
                   <SelectItem key={city.id} value={city.name}>
                     {city.name}
                   </SelectItem>
