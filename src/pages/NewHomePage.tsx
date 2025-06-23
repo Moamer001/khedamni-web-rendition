@@ -31,8 +31,8 @@ const NewHomePage = () => {
       craftsman.profiles.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       craftsman.categories.name.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = selectedCategory === '' || craftsman.category_id === selectedCategory;
-    const matchesCity = selectedCity === '' || craftsman.profiles.cities?.name === selectedCity;
+    const matchesCategory = selectedCategory === '' || selectedCategory === 'all' || craftsman.category_id === selectedCategory;
+    const matchesCity = selectedCity === '' || selectedCity === 'all' || craftsman.profiles.cities?.name === selectedCity;
     
     return matchesSearch && matchesCategory && matchesCity;
   });
@@ -120,7 +120,7 @@ const NewHomePage = () => {
                 <SelectValue placeholder="اختر المهنة" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">جميع المهن</SelectItem>
+                <SelectItem value="all">جميع المهن</SelectItem>
                 {validCategories.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name}
@@ -134,7 +134,7 @@ const NewHomePage = () => {
                 <SelectValue placeholder="اختر المدينة" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">جميع المدن</SelectItem>
+                <SelectItem value="all">جميع المدن</SelectItem>
                 {validCities.map((city) => (
                   <SelectItem key={city.id} value={city.name}>
                     {city.name}
