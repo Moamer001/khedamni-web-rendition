@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile, useUpdateProfile } from "@/hooks/useProfile";
 import { useCities } from "@/hooks/useCities";
@@ -45,6 +45,7 @@ const Section = ({
 );
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
   const { data: cities } = useCities();
@@ -57,6 +58,10 @@ const Profile = () => {
     phone: '',
     city_id: ''
   });
+
+  console.log('Profile component - user:', user);
+  console.log('Profile component - profile:', profile);
+  console.log('Profile component - profileLoading:', profileLoading);
 
   React.useEffect(() => {
     if (profile) {
@@ -81,7 +86,7 @@ const Profile = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    window.location.href = '/auth';
+    navigate('/auth');
   };
 
   if (profileLoading) {
@@ -92,11 +97,11 @@ const Profile = () => {
     );
   }
 
-  if (!profile) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center">
         <div className="text-center">
-          <p className="mb-4">لم يتم العثور على البيانات الشخصية</p>
+          <p className="mb-4">يرجى تسجيل الدخول أولاً</p>
           <Link to="/auth" className="text-blue-600 hover:underline">
             تسجيل الدخول
           </Link>
@@ -105,17 +110,27 @@ const Profile = () => {
     );
   }
 
+  // If no profile exists, show basic user info from auth
+  const displayProfile = profile || {
+    first_name: user.user_metadata?.first_name || '',
+    last_name: user.user_metadata?.last_name || '',
+    email: user.email || '',
+    phone: user.user_metadata?.phone || user.phone || '',
+    avatar_url: user.user_metadata?.avatar_url || '',
+    cities: null
+  };
+
   return (
     <div className="min-h-screen bg-[#f9f9f9]">
       {/* Profile Card */}
       <div className="max-w-md w-full mx-auto pt-8 mb-8 bg-white rounded-2xl shadow p-6 flex flex-col items-center">
         <Avatar className="w-24 h-24 mb-3 ring-2 ring-[#f3b12d] ring-offset-2 ring-offset-white">
           <AvatarImage
-            src={profile.avatar_url}
-            alt={`${profile.first_name} ${profile.last_name}`}
+            src={displayProfile.avatar_url}
+            alt={`${displayProfile.first_name} ${displayProfile.last_name}`}
           />
           <AvatarFallback>
-            {profile.first_name.charAt(0)}{profile.last_name.charAt(0)}
+            {displayProfile.first_name?.charAt(0) || 'U'}{displayProfile.last_name?.charAt(0) || ''}
           </AvatarFallback>
         </Avatar>
         
@@ -189,19 +204,19 @@ const Profile = () => {
         ) : (
           <>
             <div className="text-xl font-bold text-[#252525] mb-1" dir="rtl">
-              {profile.first_name} {profile.last_name}
+              {displayProfile.first_name || 'مستخدم'} {displayProfile.last_name || ''}
             </div>
             <div className="text-[#202c76] text-sm mb-1" dir="ltr">
-              {profile.email}
+              {displayProfile.email}
             </div>
-            {profile.phone && (
+            {displayProfile.phone && (
               <div className="text-gray-600 text-sm mb-1" dir="rtl">
-                {profile.phone}
+                {displayProfile.phone}
               </div>
             )}
-            {profile.cities?.name && (
+            {displayProfile.cities?.name && (
               <div className="text-gray-600 text-sm mb-3" dir="rtl">
-                {profile.cities.name}
+                {displayProfile.cities.name}
               </div>
             )}
             <Button
